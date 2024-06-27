@@ -2,9 +2,11 @@
   <img src="https://wmbr.s3.amazonaws.com/img/logo_webmaniabr_github2.png">
 </p>
 
-# Token para acesso do XML/PDF sem senha - DFeToken
+# Token para acesso do XML/PDF na Webmania®
 
-Conforme as regras da LGPD e para a segurança das informações sensíveis dos documentos fiscais, após o período de 24 horas ou após o primeiro acesso público, são aplicadas restrições de acesso aos arquivos XML e PDF conforme a documentação.
+Na Webmania, a segurança da informação é nossa prioridade máxima. Por esse motivo, aplicamos restrições de acesso aos arquivos XML e PDF para garantir a segurança dos documentos fiscais.
+
+Após a emissão, os arquivos XML e PDF permanecem públicos por 24 horas ou até o primeiro acesso, o que ocorrer primeiro. Após esse período o documento fiscal é criptografado com senha, e só pode ser visualizado após a confirmação do CPF/CNPJ do tomador da nota fiscal ou conforme formas de autenticação como, por exemplo, a geração do token na URL do XML e PDF.
 
 - NF-e/NFC-e: https://webmaniabr.com/docs/rest-api-nfe/#download-xml-pdf
 - NFS-e:  https://webmaniabr.com/docs/rest-api-nfse/#download-xml-pdf
