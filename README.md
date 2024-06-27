@@ -17,6 +17,8 @@ Após a emissão, os arquivos XML e PDF permanecem públicos por 24 horas ou at�
 
 Para disponibilizar o link do PDF e XML com segurança e eliminar a exigência da senha, é necessário a geração do token de forma criptografada utilizando a camada de segurança AES-256-CBC. Após gerar o token, deve ser enviado na URL do arquivo. Segue exemplo: https://nfe.webmaniabr.com/danfe/[CHAVE]/?token=[TOKEN]. 
 
+**ATENÇÃO:** Este recurso não está disponível para documentos fiscais sem tomador. O acesso para esses documentos, devem ser realizados via Credenciais de Acesso.
+
 # Passo a passo
 
 1. **Coleta de dados:** No banco de dados do seu sistema, colete a informação da senha (CPF/CNPJ do tomador de nota fiscal) e a UUID (retornada pela API da Webmania) do documento fiscal.
