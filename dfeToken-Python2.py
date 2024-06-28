@@ -12,16 +12,18 @@ def create_secure_token_dfe(password, uuid):
     password = re.sub(r'\D', '', password)
 
     # Generate the key using SHA-256
-    key_source = "{}:{}".format(password, uuid).encode('utf-8')
-    key = hashlib.sha256(key_source).digest()
+    key_source = "{}:{}".format(password, uuid)
+    key = hashlib.sha256(key_source.encode('utf-8')).digest()
 
     # Generate the IV
     iv = os.urandom(AES.block_size)
 
-    # Encrypt the current time
+    # Encrypt the current time as string
     cipher = AES.new(key, AES.MODE_CBC, iv)
-    current_time = int(time()).to_bytes(AES.block_size, 'big')
-    encrypted_data = cipher.encrypt(current_time)
+    current_time = str(int(time())).encode('utf-8')
+    padding_length = AES.block_size - len(current_time)
+    current_time_padded = current_time + b' ' * padding_length
+    encrypted_data = cipher.encrypt(current_time_padded)
 
     # Prepare the token data
     token_data = {
@@ -31,7 +33,7 @@ def create_secure_token_dfe(password, uuid):
 
     # Convert token data to JSON and then to URL-safe base64
     token_json = json.dumps(token_data)
-    token_base64 = base64.b64encode(token_json.encode('utf-8'))
+    token_base64 = base64.urlsafe_b64encode(token_json.encode('utf-8'))
 
     # URL encode the base64 string
     return urlencode(token_base64)
