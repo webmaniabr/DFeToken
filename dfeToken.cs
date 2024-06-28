@@ -29,7 +29,8 @@ public class SecureToken
 
                 using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, iv))
                 {
-                    byte[] timeBytes = BitConverter.GetBytes(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                    string timeString = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+                    byte[] timeBytes = Encoding.UTF8.GetBytes(timeString);
                     byte[] encryptedData = encryptor.TransformFinalBlock(timeBytes, 0, timeBytes.Length);
 
                     // Prepare the token data
