@@ -7,40 +7,28 @@ public class SecureToken
 {
     public static string CreateSecureTokenDFe(string password, string uuid)
     {
-        // Remove all non-numeric characters from the password
         password = System.Text.RegularExpressions.Regex.Replace(password, "[^0-9]", "");
-
-        // Generate the key using SHA-256
         using (SHA256 sha256 = SHA256.Create())
         {
             string keySource = password + ":" + uuid;
             byte[] key = sha256.ComputeHash(Encoding.UTF8.GetBytes(keySource));
-
-            // Generate the IV
             using (Aes aes = Aes.Create())
             {
                 aes.Key = key;
                 aes.GenerateIV();
                 byte[] iv = aes.IV;
-
-                // Encrypt the current time
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
-
                 using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, iv))
                 {
                     string timeString = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
                     byte[] timeBytes = Encoding.UTF8.GetBytes(timeString);
                     byte[] encryptedData = encryptor.TransformFinalBlock(timeBytes, 0, timeBytes.Length);
-
-                    // Prepare the token data
                     var tokenData = new
                     {
                         data = Convert.ToBase64String(encryptedData),
                         iv = Convert.ToBase64String(iv)
                     };
-
-                    // Convert token data to JSON and then to URL-safe base64
                     string tokenJson = JsonConvert.SerializeObject(tokenData);
                     return Uri.EscapeDataString(Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenJson)));
                 }
