@@ -19,7 +19,7 @@ def create_secure_token_dfe(password, uuid)
   cipher.encrypt
   cipher.key = key
   cipher.iv = iv
-  current_time = [Time.now.to_i].pack('Q>')
+  current_time = Time.now.to_i.to_s  # Convert timestamp to string
   encrypted_data = cipher.update(current_time) + cipher.final
 
   # Prepare the token data
