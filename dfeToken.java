@@ -33,7 +33,8 @@ public class SecureToken {
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 
         long currentTime = System.currentTimeMillis() / 1000L;
-        byte[] timeBytes = longToBytes(currentTime);
+        String timeString = Long.toString(currentTime);
+        byte[] timeBytes = timeString.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedData = cipher.doFinal(timeBytes);
 
         // Prepare the token data
@@ -43,15 +44,6 @@ public class SecureToken {
 
         String tokenJson = tokenData.toString();
         return Base64.getUrlEncoder().encodeToString(tokenJson.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private static byte[] longToBytes(long x) {
-        byte[] result = new byte[8];
-        for (int i = 7; i >= 0; i--) {
-            result[i] = (byte) (x & 0xFF);
-            x >>= 8;
-        }
-        return result;
     }
 
     public static void main(String[] args) {
