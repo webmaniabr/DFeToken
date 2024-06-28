@@ -18,10 +18,11 @@ def create_secure_token_dfe(password, uuid):
     # Generate the IV
     iv = os.urandom(AES.block_size)
     
-    # Encrypt the current time
+    # Encrypt the current time as string
     cipher = AES.new(key, AES.MODE_CBC, iv)
-    current_time = int(time()).to_bytes(AES.block_size, 'big')
-    encrypted_data = cipher.encrypt(current_time)
+    current_time = str(int(time())).encode('utf-8')
+    current_time_padded = current_time + b' ' * (AES.block_size - len(current_time))
+    encrypted_data = cipher.encrypt(current_time_padded)
     
     # Prepare the token data
     token_data = {
