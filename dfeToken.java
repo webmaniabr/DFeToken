@@ -13,35 +13,24 @@ import org.json.JSONObject;
 public class SecureToken {
     
     public static String createSecureTokenDFe(String password, String uuid) throws Exception {
-        // Remove all non-numeric characters from the password
         password = password.replaceAll("[^0-9]", "");
-
-        // Generate the key using SHA-256
         String keySource = password + ":" + uuid;
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] key = digest.digest(keySource.getBytes(StandardCharsets.UTF_8));
-
-        // Generate the IV
         SecureRandom random = new SecureRandom();
         byte[] iv = new byte[16];
         random.nextBytes(iv);
-
-        // Encrypt the current time
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-
         long currentTime = System.currentTimeMillis() / 1000L;
         String timeString = Long.toString(currentTime);
         byte[] timeBytes = timeString.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedData = cipher.doFinal(timeBytes);
-
-        // Prepare the token data
         JSONObject tokenData = new JSONObject();
         tokenData.put("data", Base64.getEncoder().encodeToString(encryptedData));
         tokenData.put("iv", Base64.getEncoder().encodeToString(iv));
-
         String tokenJson = tokenData.toString();
         return Base64.getUrlEncoder().encodeToString(tokenJson.getBytes(StandardCharsets.UTF_8));
     }
